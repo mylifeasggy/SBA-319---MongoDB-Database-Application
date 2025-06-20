@@ -49,7 +49,7 @@ router.route("/:id")
     .get(async (req, res) => {
         const {id}= req.params
 
-        let reservation = await Reservations.findById({ id });
+        let reservation = await Reservations.findById(id);
         if (reservation) {
             return { reservation }
         } else {
@@ -58,8 +58,8 @@ router.route("/:id")
 
     }).put(async (req, res) => {
 
-        const { date, phone, email } = req.body
-        let reservation = await Reservations.findByIdAndUpdate({ id }, { date,phone, email });
+        const { date, phone, email } = req.body //ASK ABOUT THIS...
+        let reservation = await Reservations.findByIdAndUpdate(id, { date, phone, email });
         reservation.save()
         res.status(200).json({ message: 'Reservation updated', reservation });
        

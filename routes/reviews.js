@@ -33,7 +33,8 @@ try{
 
 try {
     reviewsRouter.delete('/:id', async (req,res)=> {
-        const review = await Reviews.findOneAndDelete(req.params.id)
+     
+        const review = await Reviews.findOneAndDelete({id})
 
         if(!review) {
             res.status(204).json({message: 'Content no found'})

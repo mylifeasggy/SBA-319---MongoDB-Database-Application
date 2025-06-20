@@ -16,16 +16,20 @@ const reservationModel = mongoose.Schema({
     required:true,
     default: Date.now()
  },
- time: String,
   email: {
     type:String,
     required:true,
     lowercase:true,
-
+    unique:true,
  }, 
- phone: Number,
+ phone: {
+   type:Number,
+   unique:true,
+ },
  people: Number,
 });
 
 
 export default mongoose.model('reservations', reservationModel);
+
+
