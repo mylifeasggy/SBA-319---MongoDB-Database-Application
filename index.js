@@ -1,7 +1,8 @@
 import express from 'express'
 import mongoose from 'mongoose'
-
-import reservationsRoutes from './routes/Reservations.js';
+import reservationsRoutes from "./routes/Reservations.js";
+import reviewsRoute from "./routes/reviews.js"
+import menuRoute from "./routes/menu.js"
 
 import 'dotenv/config'
 
@@ -13,7 +14,12 @@ console.log('Database Connected')
 const app = express()
 const port = process.env.PORT
 
+
+//Routes 
+
 app.use("/reservations", reservationsRoutes);
+app.use("/reviews", reviewsRoute);
+app.use('/menu', menuRoute);
 
 app.get("/", (req, res) => {
     res.send('Hello')

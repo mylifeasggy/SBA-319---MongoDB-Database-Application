@@ -7,11 +7,14 @@ const router = express.Router();
 router.use(express.json());
 
 router.get('/', async (req, res) => {
-    let reservations = await Reservations.find({});
+    try{
+let reservations = await Reservations.find({});
     console.log(reservations)
-
     res.send(reservations);
 
+    }catch (e) {
+        res.status(500).json({message: e.message});
+    }
 });
 
 
@@ -37,7 +40,7 @@ try {
 
 } catch (e) {
     console.log(e.message);
-    res.send(e.message)
+    res.status(400).json({message:e.message})
 }
 
 router.route("/:id")
@@ -53,6 +56,7 @@ router.route("/:id")
 
 }).put(async (req, res)=> {
     let reservations = await Reservations.find({id});
+    reservations = req.body;
 
 
 }).delete (async(req,res) => { 
