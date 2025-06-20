@@ -38,8 +38,19 @@ try {
 
 }
 
+menuRoute.put('/:id', async(req, res)=> {
+    const {id} = req.params;
+    const {price} = req.params.price
+    let plate = await Menu.findbyIdAndUpdate(id, {price});
+    plate.save()
+    res.status(200).json({ message: 'Plate updated', plate });
+})
 
 
-
+menuRoute.delete('/:id',async (req,res)=>{
+    const {id} = req.params;
+    let plate = await Menu.findbyIdAndDelete(id)
+    return res.status(204).json({message: 'Plate deleted', plate});
+});
 
 export default menuRoute;
