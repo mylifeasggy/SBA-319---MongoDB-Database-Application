@@ -22,6 +22,7 @@ try {
 
     router.post('/', (req, res) => {
         const { firstName, lastName, date, time, email, phone, people, } = req.body;
+
         const newReservation = new Reservations({
             firstName,
             lastName,
@@ -57,16 +58,18 @@ router.route("/:id")
 
     }).put(async (req, res) => {
 
-        const { date, time } = req.body;
-        let reservation = await Reservations.findByIdAndUpdate({ id }, { date, time });
+        const { date, phone, email } = req.body
+        let reservation = await Reservations.findByIdAndUpdate({ id }, { date,phone, email });
+        reservation.save()
         res.status(200).json({ message: 'Reservation updated', reservation });
+       
 
 
     }).delete(async (req, res) => {
         const { id } = req.params
-        let reservation = await Reservations.findByIdAndDelete({ id });
+        let reservation = await Reservations.findByIdAndDelete(id);
 
-        return res.status(204).send(`${reservation} deleted`);
+        return res.status(204).json(`${reservation} deleted`);
 
     })
 
