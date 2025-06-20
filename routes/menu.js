@@ -52,9 +52,14 @@ menuRoute.route('/:id')
     }).delete('/:id', async (req, res) => {
 
         const { id } = req.params;
+
         let plate = await Menu.findbyIdAndDelete(id)
+
+        if(!plate) {
+            
         return res.status(204).json({ message: 'Plate deleted', plate });
-        
+        }
+
     });
 
 export default menuRoute;

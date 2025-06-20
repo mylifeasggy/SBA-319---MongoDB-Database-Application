@@ -33,21 +33,22 @@ try{
 
 try {
     reviewsRouter.delete('/:id', async (req,res)=> {
-     
-        const review = await Reviews.findOneAndDelete({id})
+        const {id}= req.params;
+
+        const review = await Reviews.findOneAndDelete(id);
 
         if(!review) {
-            res.status(204).json({message: 'Content no found'})
+            res.status(204).json({message: 'Content no found'});
         }
 
-        res.status(200).json({message:'Review delete '})
+        res.status(200).json({message:'Review delete '});
         return review
 
     });
 
 } catch (e) {
-    console.log(e.message)
+    console.log(e.message);
     throw e
 }
 
-export default reviewsRouter
+export default reviewsRouter;
