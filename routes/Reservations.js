@@ -18,12 +18,14 @@ router.get('/', async (req, res) => {
 });
 
 
-try {
 
-    router.post('/', (req, res) => {
+
+router.post('/', async (req, res) => {
+    try {
+
         const { firstName, lastName, date, time, email, phone, people, } = req.body;
 
-        const newReservation = new Reservations({
+        let newReservation = new Reservations({
             firstName,
             lastName,
             date,
@@ -33,43 +35,68 @@ try {
             people,
         });
 
-        const result = newReservation.save()
+        await newReservation.save()
         console.log(newReservation)
 
-        return res.status(201).json({ message: 'Reservartion created successfully', result })
-    });
+        return res.status(201).json({ message: 'Reservartion created successfully', newReservation })
 
-} catch (e) {
-    console.log(e.message);
-    res.status(400).json({ message: e.message })
-}
+
+    } catch (e) {
+        console.log(e.message);
+        res.status(400).json({ message: e.message })
+    }
+
+});
 
 router.route("/:id")
 
     .get(async (req, res) => {
-     
-        let reservation = await Reservations.findById(req.params.id);
-        if (reservation) {
-            return { reservation }
-        } else {
-            return res.status(404).send('Reservation not found')
+        try {
+            let reservation = await Reservations.findById(req.params.id);
+            if (!reservation) {
+                return res.status(404).json('Reservation not found')
+
+            }
+            res.status(200).json(reservation)
+        } catch (e) {
+            res.status(400).json({ message: e.message });
         }
 
     }).put(async (req, res) => {
 
-        const { date, phone, email } = req.body //ASK ABOUT THIS...
-        let reservation = await Reservations.findByIdAndUpdate(req.params.id, { date, phone, email });
-        reservation.save()
-        res.status(200).json({ message: 'Reservation updated', reservation });
-       
+        try {
+            const { id } = req.params;
+            const { date, phone, email } = req.body //ASK ABOUT THIS...
+            let reservation = await Reservations.findByIdAndUpdate(id, { date, phone, email });
+
+            if (!reservation) {
+                return res.status(404).json({ message: 'Reservation not found' });
+
+
+            }
+
+            res.status(200).json({ message: 'Reservation updated', reservation });
+        } catch (e) {
+            res.status(400).json({ message: e.message });
+        }
 
 
     }).delete(async (req, res) => {
-        const { id } = req.params
-        let reservation = await Reservations.findByIdAndDelete(id);
+        try {
+            const { id } = req.params
+            let reservation = await Reservations.findByIdAndDelete(id);
 
-        return res.status(204).json(`${reservation} deleted`);
+            if (!reservation) {
 
+                return res.status(404).json({ message: 'Reservation not found' });
+
+            }
+
+            res.status(200).json({ message: 'Reservation deleted successfully', reservation });
+
+        } catch (e) {
+            res.status(400).json({ message: e.message });
+        }
     })
 
 export default router;

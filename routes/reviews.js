@@ -4,53 +4,62 @@ import Reviews from "../models/reviewsSchema.js"
 const reviewsRouter = express.Router()
 
 
-reviewsRouter.get('/', async (req, res)=>{
-    
-    
-    let reviews = await Reviews.find({})
-    res.json(reviews)
-    console.log(reviews)
+reviewsRouter.get('/', async (req, res) => {
+    try {
+        let reviews = await Reviews.find({})
+        res.json(reviews)
+        console.log(reviews)
+    } catch (e) {
+
+        console.log(e.message);
+        res.status(500).json({ message: e.message });
+
+    }
+
+
 });
 
 
-try{
-    reviewsRouter.post('/', (req, res)=> {
-        const {email, rating, comment} = req.body
 
-        const newReview = new Reviews ({
+reviewsRouter.post('/', async (req, res) => {
+
+    try {
+        const { email, rating, comment } = req.body
+
+        const newReview = new Reviews({
             email,
             rating,
-            comment 
+            comment
         });
 
-        const result = newReview.save()
+        let review = await newReview.save()
 
-        res.status(201).json({message: "Review created", result});
-    });
+        res.status(201).json({ message: "Review created", review });
 
-}catch (e){
-    res.status(400).json({message:e.message})
+    } catch (e) {
+        res.status(400).json({ message: e.message })
+    }
 
-}
+});
 
-try {
-    reviewsRouter.delete('/:id', async (req,res)=> {
-        const {id}= req.params;
 
-        const review = await Reviews.findOneAndDelete(id);
+reviewsRouter.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
 
-        if(!review) {
-            res.status(404).json({message: 'Content no found'});
+        let review = await Reviews.findByIdAndDelete(id);
+
+        if (!review) {
+            res.status(404).json({ message: 'Review no found' });
         }
 
-        res.status(200).json({message:'Review delete '});
-        return review
+        res.status(200).json({ message: 'Review delete ' });
 
-    });
+    } catch (e) {
+        console.log(e.message);
+        res.status(400).json({ message: e.message });
+    }
 
-} catch (e) {
-    console.log(e.message);
-    throw e
-}
+});
 
 export default reviewsRouter;
