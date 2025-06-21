@@ -4,6 +4,7 @@
 You will create a small Node, Express, and MongoDB server application. The topic and content of this application is entirely up to you; be creative!
 
 <h1> Objetives </h1>
+
 Create a server application with Node, Express, and MongoDB.
 Create a CRUD API using Express and MongoDB.
 Create MongoDB indexes.
