@@ -24,7 +24,11 @@ reviewsRouter.get('/', async (req, res) => {
 reviewsRouter.post('/', async (req, res) => {
 
     try {
-        const { email, rating, comment } = req.body
+        const { email, rating, comment } = req.body;
+
+        if (!email || !rating || !comment) {
+            return res.status(400).json({ message: "Email, rating, and comment are required." });
+        }
 
         const newReview = new Reviews({
             email,
@@ -43,23 +47,47 @@ reviewsRouter.post('/', async (req, res) => {
 });
 
 
-reviewsRouter.delete('/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
+reviewsRouter.route('/:id')
+    .get(async (req, res) => {
+        try {
 
-        let review = await Reviews.findByIdAndDelete(id);
+            const { id } = req.params;
 
-        if (!review) {
-            res.status(404).json({ message: 'Review no found' });
+            let review = await Reviews.findById(id);
+
+            if (!review) {
+                res.status(404).json({ message: 'Review no found' });
+
+            }
+
+
+        } catch (e) {
+            console.log(e.message);
+            res.status(400).json({ message: e.message });
+
         }
 
-        res.status(200).json({ message: 'Review delete ' });
 
-    } catch (e) {
-        console.log(e.message);
-        res.status(400).json({ message: e.message });
-    }
 
-});
+
+
+    }).delete(async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            let review = await Reviews.findByIdAndDelete(id);
+
+            if (!review) {
+                res.status(404).json({ message: 'Review no found' });
+            } else {
+                res.status(200).json({ message: 'Review delete ' });
+            }
+
+        } catch (e) {
+            console.log(e.message);
+            res.status(400).json({ message: e.message });
+        }
+
+    });
 
 export default reviewsRouter;
