@@ -5,10 +5,12 @@ const reviewsRouter = express.Router()
 
 
 reviewsRouter.get('/', async (req, res)=>{
+    
+    
     let reviews = await Reviews.find({})
     res.json(reviews)
     console.log(reviews)
-})
+});
 
 
 try{
@@ -23,7 +25,7 @@ try{
 
         const result = newReview.save()
 
-        res.status(200).json({message: "Review created", result});
+        res.status(201).json({message: "Review created", result});
     });
 
 }catch (e){
@@ -38,7 +40,7 @@ try {
         const review = await Reviews.findOneAndDelete(id);
 
         if(!review) {
-            res.status(204).json({message: 'Content no found'});
+            res.status(404).json({message: 'Content no found'});
         }
 
         res.status(200).json({message:'Review delete '});
