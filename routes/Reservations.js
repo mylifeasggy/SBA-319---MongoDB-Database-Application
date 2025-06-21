@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     try {
         let reservations = await Reservations.find({});
         console.log(reservations)
-        res.send(reservations);
+        res.status(200).json(reservations);
 
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -47,9 +47,8 @@ try {
 router.route("/:id")
 
     .get(async (req, res) => {
-        const {id}= req.params
-
-        let reservation = await Reservations.findById(id);
+     
+        let reservation = await Reservations.findById(req.params.id);
         if (reservation) {
             return { reservation }
         } else {
@@ -59,7 +58,7 @@ router.route("/:id")
     }).put(async (req, res) => {
 
         const { date, phone, email } = req.body //ASK ABOUT THIS...
-        let reservation = await Reservations.findByIdAndUpdate(id, { date, phone, email });
+        let reservation = await Reservations.findByIdAndUpdate(req.params.id, { date, phone, email });
         reservation.save()
         res.status(200).json({ message: 'Reservation updated', reservation });
        

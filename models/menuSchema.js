@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const menuModel = mongoose.Schema({
-    plate_name: String,
+    plate_name: {
+        type: String,
+        required:true,
+    },
     plate_description: String,
     serving_size: Number,
     price: {
