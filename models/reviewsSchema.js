@@ -16,4 +16,12 @@ const reviewModel = mongoose.Schema({
 
 });
 
+/*
+CREATE INDEX. 
+I create index directly in mongoDb.
+
+reviewModel.index({email:1});
+review.Model({rating:-1}); look for high index to low.
+ */
+
 export default mongoose.model('reviews', reviewModel);

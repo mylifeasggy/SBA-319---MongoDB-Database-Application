@@ -11,4 +11,15 @@ const menuModel = mongoose.Schema({
     vegan: Boolean
 });
 
+
+
+/*  CREATE INDEXES  
+
+menuModel.index({plate_name: text });
+menuModel.index({price: 1 });
+menuModel.index({vegan: 1})
+
+
+*/
+
 export default mongoose.model('menu', menuModel)
